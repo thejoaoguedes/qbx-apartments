@@ -1,4 +1,4 @@
-local QBCore = exports['qbx-core']:GetCoreObject()
+local QBCore = exports['qb-core']:GetCoreObject()
 local apartmentZones = {}
 local houseObj = {}
 local poiOffsets = {}
@@ -23,7 +23,7 @@ local function showEntranceHeaderMenu(id)
 
     lib.callback('apartments:IsOwner', false, function(result)
         isOwned = result
-        
+
         if isOwned then
             headerMenu[#headerMenu + 1] = {
                 title = Lang:t('text.enter'),
@@ -183,7 +183,7 @@ local function enterApartment(house, apartmentId, new)
             currentOffset = newoffset
             TriggerServerEvent("apartments:server:AddObject", apartmentId, house, currentOffset)
             local coords = Apartments.Locations[house].enter.xyz - vec3(0, 0, currentOffset)
-            local data = exports['qbx-interior']:CreateApartmentFurnished(coords)
+            local data = exports['qb-interior']:CreateApartmentFurnished(coords)
             Wait(100)
             houseObj = data[1]
             poiOffsets = data[2]
@@ -203,7 +203,7 @@ local function enterApartment(house, apartmentId, new)
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.1)
         TriggerServerEvent("apartments:server:AddObject", apartmentId, house, currentOffset)
         local coords = Apartments.Locations[house].enter.xyz - vec3(0, 0, currentOffset)
-        local data = exports['qbx-interior']:CreateApartmentFurnished(coords)
+        local data = exports['qb-interior']:CreateApartmentFurnished(coords)
         Wait(100)
         houseObj = data[1]
         poiOffsets = data[2]
@@ -257,7 +257,7 @@ local function exitApartment()
     DoScreenFadeOut(500)
     while not IsScreenFadedOut() do Wait(10) end
     -- Despawn Interior
-    exports['qbx-interior']:DespawnInterior(houseObj, function()
+    exports['qb-interior']:DespawnInterior(houseObj, function()
         -- EnableSync
         TriggerEvent('qb-weathersync:client:EnableSync')
         -- Teleport PLayer outside
@@ -291,7 +291,7 @@ local function loggedOff()
     -- Remove Inside Points
     removeInsidePoints(currentApartment)
     -- Despawn Interior
-    exports['qbx-interior']:DespawnInterior(houseObj, function()
+    exports['qb-interior']:DespawnInterior(houseObj, function()
     -- EnableSync
     TriggerEvent('qb-weathersync:client:EnableSync')
     -- Teleport PLayer outside
@@ -392,7 +392,7 @@ end)
 RegisterNetEvent('apartments:client:SpawnInApartment', function(apartmentId, apartment, ownerCid)
     local pos = GetEntityCoords(cache.ped)
     local new = true
-    
+
     if rangDoorbell then
         new = false
         local doorbelldist = #(pos - Apartments.Locations[rangDoorbell].enter.xyz)
@@ -424,7 +424,7 @@ AddEventHandler('onResourceStop', function(resource)
     if resource ~= GetCurrentResourceName() then return end
     removeEntrances()
     if next(houseObj) then
-        exports['qbx-interior']:DespawnInterior(houseObj, function()
+        exports['qb-interior']:DespawnInterior(houseObj, function()
             TriggerEvent('qb-weathersync:client:EnableSync')
             TriggerServerEvent("qb-apartments:returnBucket")
             DoScreenFadeIn(500)

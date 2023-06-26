@@ -1,5 +1,5 @@
 local ApartmentObjects = {}
-local QBCore = exports['qbx-core']:GetCoreObject()
+local QBCore = exports['qb-core']:GetCoreObject()
 
 -- Functions
 local function createApartmentId(type)

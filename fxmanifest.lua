@@ -5,7 +5,7 @@ description 'QBX-Apartments'
 version '2.1.0'
 
 shared_scripts {
-    '@qbx-core/shared/locale.lua',
+    '@qb-core/shared/locale.lua',
     '@ox_lib/init.lua',
     'config.lua',
     'locales/en.lua',
@@ -24,9 +24,9 @@ client_scripts {
 dependencies {
     'ox_lib',
     'ox_inventory',
-    'qbx-core',
-    'qbx-interior',
-    'qbx-weathersync',
+    'qb-core',
+    'qb-interior',
+    'qb-weathersync',
 }
 
 lua54 'yes'
