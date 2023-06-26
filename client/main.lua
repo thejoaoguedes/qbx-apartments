@@ -58,8 +58,8 @@ local function showExitHeaderMenu()
         id = 'apartment_exit_context_menu',
         title = Lang:t('text.menu_header'),
         options = {
-            { title = Lang:t('text.open_door'), event = 'apartments:client:OpenDoor', },
             { title = Lang:t('text.leave'), event = 'apartments:client:LeaveApartment', },
+            { title = Lang:t('text.open_door'), event = 'apartments:client:OpenDoor', },
         }
     })
     lib.showContext('apartment_exit_context_menu')
@@ -117,7 +117,7 @@ end
 
 local function createInsidePoints(id, data)
     apartmentZones[id].exit = lib.zones.sphere({
-        coords = vector3(Apartments.Locations[currentApartment].enter.x - data.exit.x, Apartments.Locations[currentApartment].enter.y - data.exit.y - 0.5, Apartments.Locations[currentApartment].enter.z - currentOffset + data.exit.z),
+        coords = vector3(Apartments.Locations[currentApartment].enter.x + data.exit.x, Apartments.Locations[currentApartment].enter.y + data.exit.y, Apartments.Locations[currentApartment].enter.z - currentOffset + data.exit.z),
         radius = 1.0,
         debug = false,
         inside = isInside,
@@ -128,7 +128,7 @@ local function createInsidePoints(id, data)
     })
 
     apartmentZones[id].stash = lib.zones.sphere({
-        coords = vector3(Apartments.Locations[currentApartment].enter.x - data.stash.x, Apartments.Locations[currentApartment].enter.y - data.stash.y, Apartments.Locations[currentApartment].enter.z - currentOffset + data.stash.z),
+        coords = vector3(Apartments.Locations[currentApartment].enter.x + data.stash.x, Apartments.Locations[currentApartment].enter.y + data.stash.y, Apartments.Locations[currentApartment].enter.z - currentOffset + data.stash.z),
         radius = 1.0,
         debug = false,
         inside = isInside,
@@ -139,7 +139,7 @@ local function createInsidePoints(id, data)
     })
 
     apartmentZones[id].clothes = lib.zones.sphere({
-        coords = vector3(Apartments.Locations[currentApartment].enter.x - data.clothes.x, Apartments.Locations[currentApartment].enter.y - data.clothes.y, Apartments.Locations[currentApartment].enter.z - currentOffset + data.clothes.z),
+        coords = vector3(Apartments.Locations[currentApartment].enter.x + data.clothes.x, Apartments.Locations[currentApartment].enter.y + data.clothes.y, Apartments.Locations[currentApartment].enter.z - currentOffset + data.clothes.z),
         radius = 1.0,
         debug = false,
         inside = isInside,
@@ -149,23 +149,23 @@ local function createInsidePoints(id, data)
         aptId = id
     })
 
-    apartmentZones[id].logout = lib.zones.sphere({
-        coords = vector3(Apartments.Locations[currentApartment].enter.x - data.logout.x, Apartments.Locations[currentApartment].enter.y + data.logout.y, Apartments.Locations[currentApartment].enter.z - currentOffset + data.logout.z),
-        radius = 1.0,
-        debug = false,
-        inside = isInside,
-        onEnter = onEnter,
-        onExit = onExit,
-        typ = 'logout',
-        aptId = id
-    })
+    -- apartmentZones[id].logout = lib.zones.sphere({
+    --     coords = vector3(Apartments.Locations[currentApartment].enter.x - data.logout.x, Apartments.Locations[currentApartment].enter.y + data.logout.y, Apartments.Locations[currentApartment].enter.z - currentOffset + data.logout.z),
+    --     radius = 1.0,
+    --     debug = true,
+    --     inside = isInside,
+    --     onEnter = onEnter,
+    --     onExit = onExit,
+    --     typ = 'logout',
+    --     aptId = id
+    -- })
 end
 
 local function removeInsidePoints(id)
     apartmentZones[id].exit:remove()
     apartmentZones[id].stash:remove()
     apartmentZones[id].clothes:remove()
-    apartmentZones[id].logout:remove()
+    -- apartmentZones[id].logout:remove()
 end
 
 local function enterApartment(house, apartmentId, new)
@@ -336,10 +336,10 @@ RegisterNetEvent('apartments:client:RingMenu', function(data)
     TriggerServerEvent("apartments:server:RingDoor", data.apartmentId, currentEntrance)
 end)
 
-RegisterNetEvent('apartments:client:RingDoor', function(player, _)
+RegisterNetEvent('apartments:client:RingDoor', function(player, playerName)
     currentDoorBell = player
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "doorbell", 0.1)
-    QBCore.Functions.Notify(Lang:t('info.at_the_door'))
+    QBCore.Functions.Notify(Lang:t('info.at_the_door', { name = playerName }))
 end)
 
 RegisterNetEvent('apartments:client:OpenDoor', function()
@@ -452,10 +452,11 @@ RegisterNetEvent('apartments:client:setupSpawnUI', function(cData)
     if result then
         TriggerEvent('qb-spawn:client:setupSpawns', cData, false, nil)
         TriggerEvent("apartments:client:SetHomeBlip", result.type)
+        TriggerEvent('qb-spawn:client:openUI', true)
     elseif Apartments.Starting then
         TriggerEvent('qb-spawn:client:setupSpawns', cData, true, Apartments.Locations)
     else
         TriggerEvent('qb-spawn:client:setupSpawns', cData, false, nil)
+        TriggerEvent('qb-spawn:client:openUI', true)
     end
-    TriggerEvent('qb-spawn:client:openUI', true)
 end)

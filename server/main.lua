@@ -74,10 +74,11 @@ end)
 
 RegisterNetEvent('apartments:server:RingDoor', function(apartmentId, apartment)
     local src = source
+    local name = QBCore.Functions.GetPlayer(src).PlayerData.charinfo.firstname .. " " .. QBCore.Functions.GetPlayer(src).PlayerData.charinfo.lastname
     local apartmentObj = ApartmentObjects[apartment].apartments[apartmentId]
     if apartmentObj and next(apartmentObj.players) then
         for k, _ in pairs(apartmentObj.players) do
-            TriggerClientEvent('apartments:client:RingDoor', k, src)
+            TriggerClientEvent('apartments:client:RingDoor', k, src, name)
         end
     end
 end)
