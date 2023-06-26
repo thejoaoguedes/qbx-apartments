@@ -174,6 +174,8 @@ local function enterApartment(house, apartmentId, new)
 
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.1)
     openHouseAnim()
+    Wait(250)
+    exports['Renewed-Weaponscarry']:toggleProps()
     local offset = lib.callback.await('apartments:GetApartmentOffset', false, apartmentId)
     if not offset or offset == 0 then
         lib.callback('apartments:GetApartmentOffsetNewOffset', false, function(newoffset)
@@ -252,6 +254,7 @@ end
 local function exitApartment()
     -- Sound effect
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "houses_door_open", 0.1)
+    exports['Renewed-Weaponscarry']:toggleProps()
     -- Screen anim
     openHouseAnim()
     DoScreenFadeOut(500)
